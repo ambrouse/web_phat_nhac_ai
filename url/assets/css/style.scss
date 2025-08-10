@@ -1,0 +1,317 @@
+@import './mixin.scss';
+.background{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    inset: 0;
+
+    // background video
+    .background__video{
+        position:absolute;
+        inset:0; 
+        width:100%;
+        height:100%;
+        object-fit:cover; 
+        z-index:-1;
+        pointer-events:none; /* tránh chặn tương tác */
+    }
+
+    /* Overlay để tăng tương phản */
+    .background__overlay {
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, rgba(0, 0, 0, 0.144), rgba(0, 0, 0, 0.308));
+      z-index:0;
+    }
+
+    // Icon animation giua man hinh
+    .background__iconmid{
+        position:absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        z-index:0;
+        pointer-events:none; /* tránh chặn tương tác */
+        img{
+            object-fit:cover; 
+            width: 100%;
+            height: 100%;
+            opacity: .5;
+        }
+    }
+
+    // Set kicht thuoc dong cho Icon animation
+    .background__iconmid--size1{
+        width: 40vw;
+        height: 40vw;
+    }
+    .background__iconmid--size2{
+        width: 40vh;
+        height: 40vh;
+    }
+
+    // Icon mui ten o 4 goc
+    .background__iconarow{
+        position:absolute;
+        inset: 0;
+        z-index:0;
+        pointer-events:none; /* tránh chặn tương tác */
+        img{
+            position: absolute;
+            object-fit:cover; 
+            width: 20vw;
+            height: 20vh;
+            &:nth-child(1){
+                inset: 0;
+            }
+            &:nth-child(2){
+                right: 0px;
+                transform: scale(-1);
+            }
+            &:nth-child(3){
+                bottom: 0px;
+            }
+            &:nth-child(4){
+                right: 0px;
+                bottom: 0px;
+                transform: scale(-1);
+            }
+        }
+    }
+
+    // Tieu de
+    .background__title{
+        position: absolute;
+        width: 100%;
+        top: 20px;
+        text-align: center;
+        h1{
+            display: inline;
+            @include responsive-font-heading1();
+            color: white;
+            letter-spacing: 1vw;
+
+            &:nth-child(1){
+                padding-right: 1vw;
+            }
+            &:nth-child(2){
+                padding-left: 1vw;
+            }
+        }
+    }
+
+    // thong tin footer
+    .background__footer{
+        position: absolute;
+        width: 100%;
+        bottom: 30px;
+        text-align: center;
+        overflow: hidden;
+        a{
+            display: inline;
+            @include responsive-font-heading2();
+            color: white;
+            letter-spacing: 1vw;
+            text-decoration: none;
+        }
+    }
+}
+
+.main{
+    position: relative;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .main__box{
+        position: relative;
+        width: 40vh;
+        height: 50vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        .main__box--title{
+            width: 100%;
+            height: 30%;
+            overflow: hidden;
+            .title__name{
+                width: 100%;
+                text-align: center;
+                p{
+                    @include responsive-font-heading2();
+                    letter-spacing: 1vh;
+                    color: white;
+                }
+            }
+        }
+        .main__box--timeline{
+            width: 100%;
+            height: 10%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            input{
+                width: 100%;
+                width: 100%;
+                outline: 0px;
+                -webkit-appearance: none; /* Chrome, Safari, Edge */
+                appearance: none;
+                background: transparent; /* Để track tự custom */
+                &::-webkit-slider-runnable-track {
+                    height: .4vw;
+                    background: #ccc;
+                    border-radius: 10000px; 
+                    border: .1vw solid rgb(71, 26, 129);
+                }
+                &::-moz-range-track {
+                    height: .4vw;
+                    background: #ccc;
+                    border: .1vw solid rgb(71, 26, 129);
+                    border-radius: 1000px;
+                }
+                /* Nút kéo (thumb) */
+                &::-webkit-slider-thumb {
+                    -webkit-appearance: none;
+                    appearance: none;
+                    width: 1.2vw;     /* chiều rộng nút */
+                    height: .6vw;    /* chiều cao nút */
+                    background: #000000;
+                    border-radius: .2vw;
+                    cursor: pointer;
+                    margin-top: -.2vw;
+                    border: .1vw solid rgb(95, 94, 94);
+                }
+                &::-moz-range-thumb {
+                    width: 1.2vw;
+                    height: .6vw;
+                    background: #000000;
+                    border: .1vw solid rgb(95, 94, 94);
+                    border-radius: .3vw;
+                    cursor: pointer;
+                }
+            }
+        }
+        .main__box--button{
+            width: 80%;
+            height: 10%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            .button__pre{
+                width: 1.2vw;
+                height: 1.2vw;
+                cursor: pointer;
+                &:hover img{
+                    animation: anim_3d_link 0.4s ease-out forwards;
+
+                }
+                &:active img{
+                    margin-top: 4px;
+                }
+                img{
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    transition: all 0.1s linear;  
+                }
+            }
+            .button__play{
+                width: 1.8vw;
+                height: 1.8vw;
+                cursor: pointer;
+                &:hover img{
+                    animation: anim_3d_link 0.4s ease-out forwards;
+    
+                }
+                &:active img{
+                    margin-top: 4px;
+                }
+                img{
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    transition: all 0.1s linear;  
+                }
+            }
+            .button__pause{
+                width: 1.8vw;
+                height: 1.8vw;
+                cursor: pointer;
+                &:hover img{
+                    animation: anim_3d_link 0.4s ease-out forwards;
+    
+                }
+                &:active img{
+                    margin-top: 4px;
+                }
+                img{
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    transition: all 0.1s linear;  
+                }
+            }
+            .button__next{
+                width: 1.2vw;
+                height: 1.2vw;
+                cursor: pointer;
+                &:hover img{
+                    animation: anim_3d_link 0.4s ease-out forwards;
+    
+                }
+                &:active img{
+                    margin-top: 4px;
+                }
+                img{
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    transition: all 0.1s linear;  
+                }
+            }
+        }
+    }
+}
+
+
+
+.warrning{
+    position: absolute;
+    z-index: 100000;
+    width: 100vw;
+    height: 100vh;
+    background-image: linear-gradient(to right bottom,rgba(0, 0, 0),rgb(119, 119, 119));
+    top: 0px;
+    left: 0px;
+    box-sizing: border-box;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    &__display{
+        display: flex;
+    }
+    p{
+        @include responsive-font-heading3();
+        color: white;
+    }
+}
+
+
+@keyframes anim_3d_link{
+    0% {
+        transform: rotate3d(1, 1, 1, 0deg);
+    }
+    50% {
+        transform: rotate3d(1, 1, 1, 360deg);
+    }
+    100% {
+        text-shadow: 3px 3px 4px rgba(0, 0, 0, .7);
+        transform: translateY(-5px);
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.3),
+            0 10px 10px rgba(0, 0, 0, 0.3);
+        }
+}
