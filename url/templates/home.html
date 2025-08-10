@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="{{ url_for('static', filename='script/script.js') }}"></script>
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/face.png') }}" type="image/x-icon">
-    <title>Home Page</title>
+    <title>Music Page</title>
 </head>
 <body>
     <section class="background">
@@ -50,7 +50,7 @@
             </div>
             <div class="main__box--button">
                 <div class="button__pre">
-                    <img src="{{ url_for('static', filename='img/pre.png') }}" onclick="pre()" alt="">
+                    <img src="{{ url_for('static', filename='img/pre.png') }}" onclick="()=>{pre(true)}" alt="">
                 </div>
                 <div class="button__play" >
                     <img src="{{ url_for('static', filename='img/play.png') }}" onclick="pause()" alt="">
@@ -59,12 +59,14 @@
                     <img src="{{ url_for('static', filename='img/pause.png') }}" onclick="play()" alt="">
                 </div>
                 <div class="button__next">
-                    <img src="{{ url_for('static', filename='img/next.png') }}" onclick="next()" alt="">
+                    <img src="{{ url_for('static', filename='img/next.png') }}" onclick="()=>{next(true)}" alt="">
                 </div>
             </div>
             <div class="main__box--camera">
-                <div class="camera__button">
-                    <button onclick="toggleAiFuction()">AI Control</button>
+                <div class="camera__button" onclick="toggleAiFuction()">
+                    <img src="{{ url_for('static', filename='img/hand.png') }}"  alt="">
+                    <p>AI Control</p>
+                    <!-- <button ">AI Control</button> -->
                 </div>
                 <video id="video" autoplay playsinline style="display: none;"></video>
             </div>
@@ -74,12 +76,30 @@
     
     <section class="fix">
         <div class="warrning warrning__display">
-            <p>Vui long xoay ngang thiet bi</p>
+            <p>Vui Lòng Xoay Ngang Thiết Bị</p>
         </div>
     </section>
     <section class="fix">
-        <div class="warrning_ warrning__display_">
-            <span></span>
+        <div class="load load__display">
+            <img src="{{ url_for('static', filename='video/Spinner_1.gif') }}" alt="Mô tả ảnh GIF" />
+        </div>
+    </section>
+    <section class="fix">
+        <div class="notification">
+            <div class="notification__item">
+                <div class="notification__item--title">
+                    <div class="img">
+                        <img src="{{ url_for('static', filename='img/check.png') }}" alt="">
+                    </div>
+                    <div class="text">
+                        <p>Warning</p>
+                        <p>Lorem ipsum dolor sit amet </p>
+                    </div>
+                    <div class="btn">
+                        <img src="{{ url_for('static', filename='img/close.png') }}" alt="">
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 </body>

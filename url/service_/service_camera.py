@@ -16,14 +16,10 @@ hands = mp_hands.Hands(
 )
 mp_draw = mp.solutions.drawing_utils
 
-# Lấy kích thước màn hình để điều chỉnh tọa độ
-# screen_width, screen_height = pyautogui.size()
-# alpha = 0.3 # alpha: hệ số làm mượt (0.2–0.5 là hợp lý)
-
 # ratio de tinh threshold cho va cham cac diem ngon tay
 touch_ratio=0.05
 
-def test(img,smooth_x,smooth_y):
+def detectHand(img):
     if img is not None:
         image = cv2.flip(img, 1) # lat anh
         height, width, _ = image.shape
@@ -34,29 +30,11 @@ def test(img,smooth_x,smooth_y):
         # Nếu phát hiện tay
         if result.multi_hand_landmarks:
             for hand_landmarks in result.multi_hand_landmarks:
-                
-
-
-                # dic huyen chuot theo ngon tro
-                # # Lấy landmark ngón tay trỏ (số 8)
-                # index_finger_tip = hand_landmarks.landmark[8]
-                # x = int(index_finger_tip.x * width)
-                # y = int(index_finger_tip.y * height)
-
-                # # Điều chỉnh tọa độ sang màn hình
-                # screen_x = index_finger_tip.x * screen_width
-                # screen_y = index_finger_tip.y * screen_height
-
-                # # mỗi frame:
-                # smooth_x = alpha * screen_x + (1 - alpha) * smooth_x
-                # smooth_y = alpha * screen_y + (1 - alpha) * smooth_y
-                # Di chuyển chuột
-                # pyautogui.moveTo(int(smooth_x), int(smooth_y))
-
-
                 """
-                    Bat dieu kien ngon tro va ngon cai cham nhau
+                    Bat dieu kien ngon cham nhau
                 """
+
+
                 thumb_tip = hand_landmarks.landmark[4]   # Ngón cái
                 index_tip = hand_landmarks.landmark[8]   # Ngón trỏ
                 middle_tip = hand_landmarks.landmark[12]  # ngon giua
@@ -80,7 +58,7 @@ def test(img,smooth_x,smooth_y):
                 elif dist_px_4 < threshold_px:
                     funtionAI = 4
 
-    return jsonify({"smooth_x": smooth_x, "smooth_y": smooth_y, "funtionAI":funtionAI})
+    return jsonify({"funtionAI":funtionAI})
 
 
 

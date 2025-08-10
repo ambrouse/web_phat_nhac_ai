@@ -20,14 +20,12 @@ def index():
 @main.route("/thread-ai-funtion", methods=['POST'])
 def threadAiFuntion():
     if 'image' not in request.files:
-        return jsonify({"smooth_x": 0, "smooth_y": 0, "funtionAI":0})
+        return jsonify({"funtionAI":0})
 
     file = request.files['image']
-    # smooth_x = float(request.form['smooth_x'])
-    # smooth_y = float(request.form['smooth_y'])
     img = cv2.imdecode(np.frombuffer(file.read(), np.uint8), cv2.IMREAD_COLOR)
 
-    return service_camera.test(img=img,smooth_x=0,smooth_y=0)
+    return service_camera.detectHand(img=img)
 
 
 

@@ -1,9 +1,8 @@
 let index = 0;
 const list_mp3 = ["assets/mp3/bai1.mp3", "assets/mp3/bai2.mp3", "assets/mp3/bai3.mp3","assets/mp3/bai4.mp3","assets/mp3/bai5.mp3"];
+const list_namemp3 = ["Bai Hat So Mot", "Bai Hat So Hai", "Bai Hat So Ba","Bai Hat So Bon","Bai Hat So Nam"];
 let stream_ = null; 
 let intervalId = null;
-let smooth_x = 0;
-let smooth_y = 0;
 let funtionAi = 0;
 let time_delay = true
 let intervalIdNextPre = null
@@ -12,24 +11,52 @@ document.addEventListener("DOMContentLoaded", function() {
     const audio = document.querySelector('.main .main__box .main__box--title .title__name audio');
     const seekBar = document.querySelector('.main .main__box .main__box--timeline .timeline__seekBar');
     
-
     setSizeIcon();
-
+    
+    loadanimation(false)
     checkOrientation()
     window.addEventListener("orientationchange", function () {
         this.setTimeout(checkOrientation,300)
     });
-
+    
     audio.addEventListener('play', () => requestAnimationFrame(updateSeekBar));
     seekBar.addEventListener('input', () => {
         const val = seekBar.value;
         audio.currentTime = (val / 100) * audio.duration;
     });
-
-
     
+    
+    audio.addEventListener('ended', () => {
+        next();
+    });
     
 });
+
+
+function createNotification(check,text){
+    const template = document.querySelector(".notification .notification__item");
+    const clone = template.cloneNode(true); // copy toàn bộ nội dung con
+    clone.style.display = "block"; // hiện lên
+    
+    const img = clone.querySelector(".notification__item--title .img img");
+    const title = clone.querySelector(".notification__item--title .text p:nth-child(1)"); 
+    const text_ = clone.querySelector(".notification__item--title .text p:nth-child(2)");
+    if(check){
+        img.src = 'assets/img/check.png'
+        title.innerText = "Success"
+    }else{
+        title.innerText = "Warning"
+        img.src = 'assets/img/exclamation.png'
+    }
+    text_.innerText = text
+    clone.querySelector(".notification__item--title .btn img").addEventListener("click", () => {
+        clone.remove();
+    });
+    document.querySelector(".notification").appendChild(clone);
+    setTimeout(() => {
+        clone.remove();
+    }, 3000);
+}
 
 
 async function toggleAiFuction(){
@@ -39,14 +66,17 @@ async function toggleAiFuction(){
 
 
     if (stream_) {
+        loadanimation(true)
         stream_.getTracks().forEach(track => track.stop());
         video.srcObject = null;
         stream_ = null;
         clearInterval(intervalId);
         intervalId = null;
-        alert("Da dong camera!")
+        createNotification(true,"Đã tắt canmera!")
+        loadanimation(false)
     }else{
         try{
+            loadanimation(true)
             stream_ = await navigator.mediaDevices.getUserMedia({ video: true })
             video.srcObject = stream_;
             await new Promise(resolve => {
@@ -64,8 +94,6 @@ async function toggleAiFuction(){
                 canvas.toBlob(blob => {
                     const formData = new FormData();
                     formData.append("image", blob, "frame.jpg");
-                    // formData.append("smooth_x", smooth_x.toString());
-                    // formData.append("smooth_y", smooth_y.toString());
         
                     fetch('/thread-ai-funtion', {
                         method: 'POST',
@@ -74,9 +102,8 @@ async function toggleAiFuction(){
                     .then(response => response.json())
                     .then((data)=>{
                         if(data){
-                            console.log(data.funtionAI)
-                            // smooth_x = data.smooth_x;
-                            // smooth_y = data.smooth_y;
+                            // check xem AI dang nhan dien chuc nang gi: 1 bat nhac, 2 tat nhac, 3 next, 4 pre
+                            console.log(data.funtionAI) 
                             funtionAi = data.funtionAI;
                             if(data.funtionAI===1){
                                 play()
@@ -84,14 +111,24 @@ async function toggleAiFuction(){
                                 pause()
                             }else if(data.funtionAI===3){
                                 if(time_delay){
-                                    next()
+                                    console.log("next")
+                                    next(false)
                                     time_delay = false
                                     intervalIdNextPre = setInterval(()=>{
                                         time_delay = true
-                                    },1000)
+                                        loadanimation(false)
+                                    },5000)
                                 }
                             }else if(data.funtionAI===4){
-                                pre()
+                                if(time_delay){
+                                    console.log("pre")
+                                    pre(false)
+                                    time_delay = false
+                                    intervalIdNextPre = setInterval(()=>{
+                                        time_delay = true
+                                        loadanimation(false)
+                                    },5000)
+                                }
                             }
 
 
@@ -99,13 +136,14 @@ async function toggleAiFuction(){
                     });
                 }, 'image/jpeg');
             }, 300);
-            alert("khoi dong camera xong!")
+            createNotification(true,"Đã bật canmera!")
+            loadanimation(false)
         }catch(err){
             if (err.name === "NotReadableError") {
-            alert("Khoi dong lai camera");
+            createNotification(false,"Camera gặp vấn đề, đang khởi động lại!")
             setTimeout(toggleAiFuction, 300);
         } else {
-            console.error(err);
+            createNotification(false,err)
         }
         }
         
@@ -136,31 +174,43 @@ function pause() {
 }
 
 
-async function next(){
+async function next(check){
     const audio = document.querySelector('.main .main__box .main__box--title .title__name audio');
+    const name = document.querySelector('.main .main__box .main__box--title .title__name p');
+    loadanimation(true)
     if(index == (list_mp3.length - 1)){
         index = 0
     }else{
         index += 1
     } 
     audio.src = list_mp3[index]
+    name.innerText = list_namemp3[index];
     audio.load();
     await waitForAudioToLoad(audio); 
     audio.play();
+    if(check){
+        loadanimation(false)
+    }
 }
 
 
-async function pre(){
+async function pre(check){
+    loadanimation(true)
     const audio = document.querySelector('.main .main__box .main__box--title .title__name audio');
+    const name = document.querySelector('.main .main__box .main__box--title .title__name p');
     if(index == (list_mp3.length - 1)){
         index = 0
     }else{
         index += 1
     } 
     audio.src = list_mp3[index]
+    name.innerText = list_namemp3[index];
     audio.load();
     await waitForAudioToLoad(audio); 
     audio.play();
+    if(check){
+        loadanimation(false)
+    }
 }
 
 
@@ -185,6 +235,14 @@ function checkOrientation(){
         document.querySelector(".warrning").classList.add("warrning__display")
     }else{
         document.querySelector(".warrning").classList.remove("warrning__display")
+    }
+}
+
+function loadanimation(check){
+    if (check) {
+        document.querySelector(".load").classList.add("load__display")
+    }else{
+        document.querySelector(".load").classList.remove("load__display")
     }
 }
 
