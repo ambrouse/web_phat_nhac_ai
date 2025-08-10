@@ -60,9 +60,13 @@ def test(img,smooth_x,smooth_y):
                 thumb_tip = hand_landmarks.landmark[4]   # Ngón cái
                 index_tip = hand_landmarks.landmark[8]   # Ngón trỏ
                 middle_tip = hand_landmarks.landmark[12]  # ngon giua
+                ring_tip = hand_landmarks.landmark[16]   # Ngón áp út tip
+                pinky_tip = hand_landmarks.landmark[20]  # Ngón út tip
 
                 dist_px_1 = calc_distance(thumb_tip, index_tip, width = width, height = height)
                 dist_px_2 = calc_distance(thumb_tip, middle_tip, width = width, height = height)
+                dist_px_3 = calc_distance(thumb_tip, ring_tip, width = width, height = height)
+                dist_px_4 = calc_distance(thumb_tip, pinky_tip, width = width, height = height)
 
                 threshold_px = touch_ratio * width
 
@@ -71,6 +75,10 @@ def test(img,smooth_x,smooth_y):
                     funtionAI = 1
                 elif dist_px_2 < threshold_px:
                     funtionAI = 2
+                elif dist_px_3 < threshold_px:
+                    funtionAI = 3
+                elif dist_px_4 < threshold_px:
+                    funtionAI = 4
 
     return jsonify({"smooth_x": smooth_x, "smooth_y": smooth_y, "funtionAI":funtionAI})
 

@@ -5,6 +5,8 @@ let intervalId = null;
 let smooth_x = 0;
 let smooth_y = 0;
 let funtionAi = 0;
+let time_delay = true
+let intervalIdNextPre = null
 
 document.addEventListener("DOMContentLoaded", function() {
     const audio = document.querySelector('.main .main__box .main__box--title .title__name audio');
@@ -72,22 +74,31 @@ async function toggleAiFuction(){
                     .then(response => response.json())
                     .then((data)=>{
                         if(data){
-                            // console.log(data.funtionAI)
+                            console.log(data.funtionAI)
                             // smooth_x = data.smooth_x;
                             // smooth_y = data.smooth_y;
                             funtionAi = data.funtionAI;
                             if(data.funtionAI===1){
                                 play()
-                            }
-                            if(data.funtionAI===2){
+                            }else if(data.funtionAI===2){
                                 pause()
+                            }else if(data.funtionAI===3){
+                                if(time_delay){
+                                    next()
+                                    time_delay = false
+                                    intervalIdNextPre = setInterval(()=>{
+                                        time_delay = true
+                                    },1000)
+                                }
+                            }else if(data.funtionAI===4){
+                                pre()
                             }
 
 
                         }
                     });
                 }, 'image/jpeg');
-            }, 50);
+            }, 300);
             alert("khoi dong camera xong!")
         }catch(err){
             if (err.name === "NotReadableError") {
