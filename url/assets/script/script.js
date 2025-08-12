@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     
     audio.addEventListener('ended', () => {
-        next();
+        next(true);
     });
     
 });
@@ -199,9 +199,9 @@ async function pre(check){
     const audio = document.querySelector('.main .main__box .main__box--title .title__name audio');
     const name = document.querySelector('.main .main__box .main__box--title .title__name p');
     if(index == (list_mp3.length - 1)){
-        index = 0
+        index = list_mp3.length - 1
     }else{
-        index += 1
+        index -= 1
     } 
     audio.src = list_mp3[index]
     name.innerText = list_namemp3[index];
